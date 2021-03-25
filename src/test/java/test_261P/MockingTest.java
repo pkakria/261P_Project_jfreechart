@@ -65,29 +65,23 @@ public class MockingTest {
         when(mockDataSet.getValue("first")).thenReturn(10);
         when(mockDataSet.getValue("second")).thenReturn(20);
         when(mockDataSet.getValue("third")).thenReturn(30);
-
         JFreeChart pieChart = ChartFactory.createPieChart("Pie Chart", mockDataSet);
         ((PiePlot)(pieChart.getPlot())).getDataset().getKey(0);
-        // safe here. we know how many times mockDataSet() methods are called
         verify(mockDataSet, times(1)).getKey(0);
         verify(mockDataSet, never()).getKey(1);
         verify(mockDataSet, never()).getKey(2);
-
         try {
             ChartUtils.saveChartAsPNG(new File("../test3.png"),pieChart, 900, 900);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //
          //getValue gets called for an item index
         verify(mockDataSet, times(2)).getKey(0);
         verify(mockDataSet, times(1)).getKey(1);
         verify(mockDataSet, times(1)).getKey(2);
-
         //verify that mockDataSet calls getValue(key) at least 3times for 3keys.
         verify(mockDataSet, atLeast(3)).getValue(anyString());
         verify(mockDataSet, atLeast(1)).getKeys();
-
 // verify data set was changed once
     }
 
